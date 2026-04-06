@@ -27,3 +27,11 @@ Follow these steps to be able to run the application properly.
     ```bash
     java -classpath ".:sqlite-jdbc-3.51.2.0.jar" Main.java
     ```
+## **System Flow**
+| Layer             | Role                                             |
+| ----------------- | ------------------------------------------------ |
+| **GUI (Swing)**   | Collects user input and displays output          |
+| **Service Layer** | Handles logic like sync with DAOs and validation |
+| **DAO Layer**     | Executes CRUD operations on database entities.   |
+| **BaseDAO**       | Provides database connection to all DAOs.        |
+| **DB (SQLite)**   | Manages database connection and schema.          |
