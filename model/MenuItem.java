@@ -16,8 +16,8 @@ public abstract class MenuItem {
     }
 
     // Getters
-    public int getItemId()   { return this.itemId; }
-    public String getName()  { return this.name; }
+    public int getItemId()  { return this.itemId; }
+    public String getName() { return this.name; }
     public float getPrice() { return this.price; }
     // Setters
     public void setName(String name) {

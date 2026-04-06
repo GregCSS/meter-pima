@@ -2,8 +2,8 @@ package model;
 
 public class Manager extends Staff implements CanRestock {
     
-    public Manager(int staffId, String name) {
-        super(staffId, name);
+    public Manager(int id, String name, String password) {
+        super(id, name, password);
     }
 
     @Override
