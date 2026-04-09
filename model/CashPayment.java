@@ -1,17 +1,13 @@
-// Payment in cash is simple, just take the money and return the change
 package model;
 
 public class CashPayment extends Payment {
-    public CashPayment(float amountOfMoneyGiven) {
-        super(amountOfMoneyGiven);
+    public CashPayment(float cashGiven) {
+        super(cashGiven);
     }
 
     @Override
     public float processPayment(float priceToBePaid) {
-        if (priceToBePaid > this.getAmountOfMoneyGiven()) {
-            return -1;
-        }
-
-        return this.getAmountOfMoneyGiven() - priceToBePaid;
+        if (getAmount() < priceToBePaid) return -1; // insufficient cash
+        return getAmount() - priceToBePaid; // return change
     }
 }

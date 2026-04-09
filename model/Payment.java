@@ -1,15 +1,14 @@
 package model;
 
 public abstract class Payment {
-    private float amountOfMoneyGiven;
+    private final float amount;  // Amount paid or to be paid
 
-    public Payment(float amountOfMoneyGiven) {
-        this.amountOfMoneyGiven = amountOfMoneyGiven;
+    public Payment(float amount) {
+        this.amount = amount;
     }
 
-    public float getAmountOfMoneyGiven() {
-        return this.amountOfMoneyGiven;
-    }
+    public float getAmount() { return amount; }
 
+    // returns change or 0
     public abstract float processPayment(float priceToBePaid);
 }
