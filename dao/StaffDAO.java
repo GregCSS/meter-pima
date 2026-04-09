@@ -11,16 +11,15 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
     @Override
     public void create(Staff staff) {
         try (
+            // Prepare INSERT DML statement
             PreparedStatement stmt = getConnection().prepareStatement(
                 "INSERT INTO Staff(name, password, is_admin) VALUES(?, ?, ?)"
             );
         ) {
-            // Get staff name and hashed password
+            // Set name, password and admin privileges
             stmt.setString(1, staff.getName());
             stmt.setString(2, staff.getPassword());
-            stmt.setInt(3, staff.getRole());
-
-            // Execute the statement
+            stmt.setInt(3, staff.isAdmin());
             stmt.executeUpdate();
 
         // Handle error(s)
@@ -33,6 +32,7 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
     @Override
     public Staff getById(int id) {
         try (
+            // Prepare SELECT DML statement
             PreparedStatement stmt = getConnection().prepareStatement(
                 "SELECT * FROM Staff WHERE id = ?"
             );
@@ -57,16 +57,39 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
         }
         return null;
     }
+
+    // Return staff by name
+    public Staff getByName(String name) {
+        try (
+            PreparedStatement stmt = getConnection().prepareStatement(
+                "SELECT * FROM Staff WHERE name = ?"
+            );
+        ) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Staff(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getString("password"),
+                    rs.getInt("is_admin")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Not found
+    }
     
     // Return all staffs
     @Override
     public List<Staff> getAll() {
-        List<Staff> staffs = new ArrayList<>();
+        List<Staff> staffs = new ArrayList<>(); // Composition
 
         try (
-            Statement stmt = getConnection().createStatement();
-        ) {
-
+            // Create a static SELECT DML statement
+            Statement stmt = getConnection().createStatement()) {
             // Execute the statement
             ResultSet rs = stmt.executeQuery("SELECT * FROM Staff");
             while (rs.next()) { // Access the first row
@@ -97,7 +120,8 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
             // Get staff name, hashed password and id
             stmt.setString(1, staff.getName());
             stmt.setString(2, staff.getPassword());
-            stmt.setInt(3, staff.getId());
+            stmt.setInt(3, staff.isAdmin());
+            stmt.setInt(4, staff.getId());
             // Execute the statement
             stmt.executeUpdate();
         // Handle error(s)

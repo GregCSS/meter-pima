@@ -17,5 +17,5 @@ public class Staff {
     public int getId()          { return this.id; }
     public String getName()     { return this.name; }
     public String getPassword() { return this.password; }
-    public int getRole()        { return this.isAdmin; }
+    public int isAdmin()        { return this.isAdmin; }
 }

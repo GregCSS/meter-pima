@@ -2,18 +2,14 @@
 // only Food and Drink objects
 package model;
 
-import java.util.List;
-
 public abstract class MenuItem {
     private int itemId;
     private String name;
     private float price;
 
-    private List<Ingredient> ingredients;
-
     public abstract String getDetails();
 
-    public MenuItem(int itemId, String name, float price, List<Ingredient> ingredients) {
+    public MenuItem(int itemId, String name, float price) {
         this.itemId = itemId;
         this.name   = name;
         this.price  = price;
