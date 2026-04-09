@@ -12,14 +12,17 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
     public void create(Staff staff) {
         try (
             PreparedStatement stmt = getConnection().prepareStatement(
-                "INSERT INTO Staff(name, password) VALUES(?, ?)"
+                "INSERT INTO Staff(name, password, is_admin) VALUES(?, ?, ?)"
             );
         ) {
             // Get staff name and hashed password
             stmt.setString(1, staff.getName());
             stmt.setString(2, staff.getPassword());
+            stmt.setInt(3, staff.getRole());
+
             // Execute the statement
             stmt.executeUpdate();
+
         // Handle error(s)
         } catch (SQLException e) {
             e.printStackTrace();
@@ -31,7 +34,7 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
     public Staff getById(int id) {
         try (
             PreparedStatement stmt = getConnection().prepareStatement(
-                "SELECT * FROM staff WHERE id = ?"
+                "SELECT * FROM Staff WHERE id = ?"
             );
         ) {
             // Get staff id
@@ -44,7 +47,8 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
                 return new Staff(
                     rs.getInt("id"),
                     rs.getString("name"),
-                    rs.getString("password")
+                    rs.getString("password"),
+                    rs.getInt("is_admin")
                 );
             }
         // Handle error(s)
@@ -64,12 +68,13 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
         ) {
 
             // Execute the statement
-            ResultSet rs = stmt.executeQuery("SELECT * FROM staff");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Staff");
             while (rs.next()) { // Access the first row
                 staffs.add(new Staff(
                     rs.getInt("id"),
                     rs.getString("name"),
-                    rs.getString("password")
+                    rs.getString("password"),
+                    rs.getInt("is_admin")
                 ));
             }
         // Handle error(s)
@@ -86,7 +91,7 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
         try (
             // Prepare UPDATE DML statement
             PreparedStatement stmt = getConnection().prepareStatement(
-                "UPDATE staff SET name = ?, password = ? WHERE id = ?"
+                "UPDATE Staff SET name = ?, password = ? WHERE id = ?"
                 );
         ) {
             // Get staff name, hashed password and id
@@ -107,7 +112,7 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
         try (
             // Prepare UPDATE DML statement
             PreparedStatement stmt = getConnection().prepareStatement(
-                "DELETE FROM staff WHERE id = ?"
+                "DELETE FROM Staff WHERE id = ?"
             );
         ) {
             // Get staff id

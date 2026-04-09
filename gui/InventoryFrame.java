@@ -37,9 +37,12 @@ public class InventoryFrame extends JFrame {
     public InventoryFrame() {
         setTitle("Inventory Management");
         setSize(600, 400);
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+
+        setLayout(new BorderLayout(10, 10));
+        ((JComponent) getContentPane()).setBorder(
+            BorderFactory.createEmptyBorder(10, 10, 10, 10) // Add padding
+        );
 
         // Initialising the table
         tableModel = new DefaultTableModel(new String[]{"ID", "Name", "Quantity"}, 0) {

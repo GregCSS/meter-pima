@@ -2,14 +2,18 @@
 // only Food and Drink objects
 package model;
 
+import java.util.List;
+
 public abstract class MenuItem {
     private int itemId;
     private String name;
     private float price;
 
+    private List<Ingredient> ingredients;
+
     public abstract String getDetails();
 
-    public MenuItem(int itemId, String name, float price) {
+    public MenuItem(int itemId, String name, float price, List<Ingredient> ingredients) {
         this.itemId = itemId;
         this.name   = name;
         this.price  = price;
@@ -19,6 +23,11 @@ public abstract class MenuItem {
     public int getItemId()  { return this.itemId; }
     public String getName() { return this.name; }
     public float getPrice() { return this.price; }
+
+    public String getType() {
+        return this.getClass().getName();
+    }
+
     // Setters
     public void setName(String name) {
         if (name != null && !name.isEmpty()) {
@@ -30,6 +39,11 @@ public abstract class MenuItem {
         if (price > 0) {
             this.price = price; 
         }
+    }
+
+    public Boolean isMakable() {
+        // Iterates over each ingredients and see if there is enough of it in stock
+        return false;
     }
     
 }
