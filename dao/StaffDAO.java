@@ -10,10 +10,11 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
     // Create a staff
     @Override
     public void create(Staff staff) {
-        try (Connection conn = getConnection();
-            // Prepare INSERT DML statement
-            PreparedStatement stmt = conn.prepareStatement(
-                "INSERT INTO staff(name, password) VALUES(?, ?)")) {
+        try (
+            PreparedStatement stmt = getConnection().prepareStatement(
+                "INSERT INTO Staff(name, password) VALUES(?, ?)"
+            );
+        ) {
             // Get staff name and hashed password
             stmt.setString(1, staff.getName());
             stmt.setString(2, staff.getPassword());
@@ -28,10 +29,11 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
     // Return a specific staff by ID
     @Override
     public Staff getById(int id) {
-        try (Connection conn = getConnection();
-            // Prepare SELECT DML statement
-            PreparedStatement stmt = conn.prepareStatement(
-                "SELECT * FROM staff WHERE id = ?")) {
+        try (
+            PreparedStatement stmt = getConnection().prepareStatement(
+                "SELECT * FROM staff WHERE id = ?"
+            );
+        ) {
             // Get staff id
             stmt.setInt(1, id);
             // Execute the statement
@@ -55,14 +57,14 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
     // Return all staffs
     @Override
     public List<Staff> getAll() {
-        List<Staff> staffs = new ArrayList<>(); // Composition
+        List<Staff> staffs = new ArrayList<>();
 
-        try (Connection conn = getConnection();
-            // Create a static SELECT DML statement
-            Statement stmt = conn.createStatement()) {
+        try (
+            Statement stmt = getConnection().createStatement();
+        ) {
+
             // Execute the statement
             ResultSet rs = stmt.executeQuery("SELECT * FROM staff");
-
             while (rs.next()) { // Access the first row
                 staffs.add(new Staff(
                     rs.getInt("id"),
@@ -81,10 +83,12 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
     // Update name/password for a specific staff
     @Override
     public void update(Staff staff) {
-        try (Connection conn = getConnection();
+        try (
             // Prepare UPDATE DML statement
-            PreparedStatement stmt = conn.prepareStatement(
-                "UPDATE staff SET name = ?, password = ? WHERE id = ?")) {
+            PreparedStatement stmt = getConnection().prepareStatement(
+                "UPDATE staff SET name = ?, password = ? WHERE id = ?"
+                );
+        ) {
             // Get staff name, hashed password and id
             stmt.setString(1, staff.getName());
             stmt.setString(2, staff.getPassword());
@@ -100,10 +104,12 @@ public class StaffDAO extends BaseDAO implements DAO<Staff> {
     // Remove a staff by ID
     @Override
     public void delete(int id) {
-        try (Connection conn = getConnection();
+        try (
             // Prepare UPDATE DML statement
-            PreparedStatement stmt = conn.prepareStatement(
-                "DELETE FROM staff WHERE id = ?")) {
+            PreparedStatement stmt = getConnection().prepareStatement(
+                "DELETE FROM staff WHERE id = ?"
+            );
+        ) {
             // Get staff id
             stmt.setInt(1, id);
             // Execute the statement

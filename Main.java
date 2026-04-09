@@ -3,6 +3,7 @@
 // Ton faire li seulment 🤣
 
 import db.DB;
+import gui.InventoryFrame;
 import java.sql.*;
 
 public class Main {
@@ -12,9 +13,11 @@ public class Main {
             // 1. Connect to database
             // 2. Feed application with data from DB
             DB.Connect();
-            DB.testSelect();
 
             // 3. Launch GUI
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                new InventoryFrame().setVisible(true);
+            });
 
         // Handle error(s)
         } catch (SQLException e) {
