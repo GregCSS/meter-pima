@@ -1,24 +1,23 @@
 package model;
 
 public class OrderItem {
-    private MenuItem item;
-    private int quantity;
+    private final MenuSnackItem item; // Composition
+    private final int quantity;
 
-    // Aggregation here because menu item exists independently of OrderItem
-    public OrderItem(MenuItem item, int quantity) {
+    public OrderItem(MenuSnackItem item, int quantity) {
         this.item = item;
         this.quantity = quantity;
     }
 
-    public MenuItem getItem() {
-        return this.item;
+    public MenuSnackItem getItem() {
+        return item;
     }
 
     public int getQuantity() {
-        return this.quantity;
+        return quantity;
     }
 
     public float calculatePrice() {
-        return this.item.getPrice() * this.quantity;
+        return item.getPrice() * quantity;
     }
 }

@@ -4,26 +4,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private List<OrderItem> orderItems;
-    private Payment linkedPayingCustomerPayment; // Can be Cash or Card
+    private int id;
+    private final int cashierId;
+    private final List<OrderItem> items = new ArrayList<>(); // Aggregation
+    private Payment payment; // null until paid
+    private boolean isPaid = false;
 
-    public Order(Payment linkedPayingCustomerPayment) {
-        this.orderItems = new ArrayList<OrderItem>();
-        this.linkedPayingCustomerPayment = linkedPayingCustomerPayment;
+    public Order(int cashierId) {
+        this.cashierId = cashierId;
     }
 
-    public OrderItem getOrder(int index) {
-        return this.orderItems.get(index);
+    // Getters
+    public int getId() { return id; }
+    public int getCashierId() { return cashierId; }
+    public List<OrderItem> getItems() { return items; }
+    public Payment getPayment() { return payment; }
+    public boolean isPaid() { return isPaid; }
+
+    // Setters
+    public void setId(int id) { this.id = id; }
+
+    // Add item to order
+    public void addItem(MenuSnackItem item, int quantity) {
+        items.add(new OrderItem(item, quantity));
     }
 
-    // Quite a long name I know but I hope it makes sense
-    // It is basically a referrence to the customer the order is for
-    public Payment getLinkedPayingCustomerPayment() {
-        return this.linkedPayingCustomerPayment;
+    // Set payment and mark as paid
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+        this.isPaid = true;
     }
 
-    // Composition as OrderItem cannot exist if the whole Order is deleted
-    public void addOrderItem(MenuItem item, int quantity) {
-        this.orderItems.add(new OrderItem(item, quantity));
+    // Calculate total
+    public float calculateTotal() {
+        float total = 0;
+        for (OrderItem oi : items) {
+            total += oi.calculatePrice();
+        }
+        return total;
     }
 }

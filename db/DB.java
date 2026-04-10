@@ -25,6 +25,30 @@ public class DB {
         );
     """;
 
+    private static final String CREATE_ORDER_TABLE = """
+        CREATE TABLE IF NOT EXISTS Orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            cashier_id INTEGER NOT NULL,
+            total_price REAL NOT NULL,
+            is_paid BOOLEAN DEFAULT 0,
+            payment_type TEXT,
+            payment_amount REAL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    """;
+
+    private static final String CREATE_ORDER_ITEM_TABLE = """
+        CREATE TABLE IF NOT EXISTS OrderItems (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_id INTEGER NOT NULL,
+            menu_item_id INTEGER NOT NULL,
+            quantity INTEGER NOT NULL,
+            price REAL NOT NULL,
+            FOREIGN KEY(order_id) REFERENCES Orders(id),
+            FOREIGN KEY(menu_item_id) REFERENCES Menu(id)
+        );
+    """;
+
     // Inserting sample data
     private static final String[] INSERT_STAFF = {
         """
@@ -81,6 +105,8 @@ public class DB {
             // Creating tables
             stmt.execute(CREATE_STAFF_TABLE);
             stmt.execute(CREATE_MENU_TABLE);
+            stmt.execute(CREATE_ORDER_TABLE);
+            stmt.execute(CREATE_ORDER_ITEM_TABLE);
 
             for (String sql : INSERT_STAFF) { stmt.execute(sql); }
             for (String sql : INSERT_MENU) { stmt.execute(sql); }
@@ -96,11 +122,11 @@ public class DB {
 
     // Returns DB connection instance for DAOs
     public static Connection getConnection() throws SQLException {
-        if (conn.isClosed()) {
-            throw new SQLException("Error: JDBC connection is closed!");
+        if (conn == null || conn.isClosed()) {
+            conn = DriverManager.getConnection("jdbc:sqlite:db/test.db");
+            System.out.println("Reopened DB connection");
         }
-
-        return conn; 
+        return conn;
     }
 
     // NOTE: Temporary method for testing
